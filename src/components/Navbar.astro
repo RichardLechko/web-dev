@@ -52,7 +52,7 @@ const menuItems = [
     </nav>
 
     <div id="mobile-menu" class="fixed inset-0 bg-black/50 z-50 hidden md:hidden transition-opacity duration-200">
-        <div id="sidebar" class="fixed inset-y-0 right-0 w-64 bg-white shadow-lg flex flex-col transition-transform duration-200">
+        <div id="sidebar" class="fixed inset-y-0 right-0 w-64 bg-white shadow-lg flex flex-col translate-x-full transition-transform duration-200">
             <div class="flex items-center justify-between p-4 border-b">
                 <span class="font-semibold text-lg">Menu</span>
                 <button id="close-menu" class="p-2 rounded-md hover:bg-gray-100">
@@ -82,24 +82,33 @@ const menuItems = [
 
 <script>
     const mobileMenu = document.getElementById('mobile-menu');
+    const sidebar = document.getElementById('sidebar');
     const menuToggle = document.getElementById('menu-toggle');
     const closeMenu = document.getElementById('close-menu');
 
-    if (mobileMenu && menuToggle && closeMenu) {
-        // Simple toggle
+    if (mobileMenu && menuToggle && closeMenu && sidebar) {
         menuToggle.addEventListener('click', () => {
             mobileMenu.classList.remove('hidden');
+            // Add a small delay before removing translate-x-full
+            requestAnimationFrame(() => {
+                sidebar.classList.remove('translate-x-full');
+            });
         });
 
-        // Simple close
         closeMenu.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
+            sidebar.classList.add('translate-x-full');
+            // Wait for slide animation to finish before hiding
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 200);
         });
 
-        // Close on outside click
         mobileMenu.addEventListener('click', (e) => {
             if (e.target === mobileMenu) {
-                mobileMenu.classList.add('hidden');
+                sidebar.classList.add('translate-x-full');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 200);
             }
         });
     }
