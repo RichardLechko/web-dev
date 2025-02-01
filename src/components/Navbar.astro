@@ -10,7 +10,6 @@ const menuItems = [
 
 <header class="absolute inset-x-0 top-0 z-50">
     <nav class="fixed top-0 left-0 right-0 bg-white z-50 border-b border-gray-200">
-        <!-- Previous nav content remains the same -->
         <div class="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto">
             <div class="flex lg:flex-1">
                 <a href="/" class="-m-1.5 p-1.5">
@@ -25,8 +24,8 @@ const menuItems = [
                     type="button" 
                     id="menu-toggle"
                     aria-label="Open main menu"
-                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-                    <svg class="size-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 cursor-pointer">
+                    <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
@@ -51,10 +50,10 @@ const menuItems = [
         </div>
     </nav>
 
-    <!-- Mobile menu overlay -->
+    <!-- Mobile menu overlay - hidden at md breakpoint -->
     <div 
         id="mobile-menu" 
-        class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300 opacity-0"
+        class="fixed inset-0 bg-black/50 z-50 hidden md:hidden transition-opacity duration-300 opacity-0"
         role="dialog"
         aria-modal="true"
     >
@@ -67,7 +66,7 @@ const menuItems = [
                 <span class="font-semibold text-lg">Menu</span>
                 <button 
                     id="close-menu"
-                    class="p-2 rounded-md hover:bg-gray-100"
+                    class="p-2 rounded-md hover:bg-gray-100 cursor-pointer"
                 >
                     <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
