@@ -24,7 +24,8 @@ const menuItems = [
                     type="button" 
                     id="menu-toggle"
                     aria-label="Open main menu"
-                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 cursor-pointer">
+                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 cursor-pointer"
+                >
                     <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -50,7 +51,7 @@ const menuItems = [
         </div>
     </nav>
 
-    <!-- Mobile menu overlay - hidden at md breakpoint -->
+    <!-- Mobile menu overlay -->
     <div 
         id="mobile-menu" 
         class="fixed inset-0 bg-black/50 z-50 hidden md:hidden transition-opacity duration-300 opacity-0"
@@ -94,30 +95,35 @@ const menuItems = [
 </header>
 
 <script>
-    const mobileMenu = document.getElementById('mobile-menu');
-    const sidebar = document.getElementById('sidebar');
-    const menuToggle = document.getElementById('menu-toggle');
-    const closeMenu = document.getElementById('close-menu');
-    const menuLinks = sidebar?.querySelectorAll('a');
+    // Define elements with type assertions
+    const mobileMenu = document.getElementById('mobile-menu') as HTMLDivElement;
+    const sidebar = document.getElementById('sidebar') as HTMLDivElement;
+    const menuToggle = document.getElementById('menu-toggle') as HTMLButtonElement;
+    const closeMenu = document.getElementById('close-menu') as HTMLButtonElement;
 
-    function openMenu() {
-        if (!mobileMenu || !sidebar) return;
-        
+    // Guard clause to ensure all elements exist
+    if (!mobileMenu || !sidebar || !menuToggle || !closeMenu) {
+        console.error('Required elements not found');
+        throw new Error('Required elements not found');
+    }
+
+    function openMenu(): void {
         // Show overlay
         mobileMenu.classList.remove('hidden');
         // Ensure opacity transition works by forcing a reflow
-        mobileMenu.offsetHeight;
+        void mobileMenu.offsetHeight;
         mobileMenu.classList.add('opacity-100');
         
         // Show sidebar
         requestAnimationFrame(() => {
             sidebar.classList.remove('translate-x-full');
         });
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
     }
 
-    function closeMenuHandler() {
-        if (!mobileMenu || !sidebar) return;
-
+    function closeMenuHandler(): void {
         // Hide sidebar first
         sidebar.classList.add('translate-x-full');
         mobileMenu.classList.remove('opacity-100');
@@ -125,31 +131,34 @@ const menuItems = [
         // Hide overlay after animation
         setTimeout(() => {
             mobileMenu.classList.add('hidden');
+            // Restore body scroll
+            document.body.style.overflow = '';
         }, 300);
     }
 
-    // Event Listeners
-    menuToggle?.addEventListener('click', openMenu);
-    closeMenu?.addEventListener('click', closeMenuHandler);
-
-    // Close when clicking overlay (but not sidebar)
-    mobileMenu?.addEventListener('click', (e) => {
+    // Overlay click handler
+    function handleOverlayClick(e: MouseEvent): void {
         if (e.target === mobileMenu) {
             closeMenuHandler();
         }
-    });
+    }
 
-    // Close when clicking a link
-    menuLinks?.forEach(link => {
-        link.addEventListener('click', () => {
-            closeMenuHandler();
-        });
-    });
-
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+    // Escape key handler
+    function handleEscapeKey(e: KeyboardEvent): void {
+        if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
             closeMenuHandler();
         }
+    }
+
+    // Add event listeners
+    menuToggle.addEventListener('click', openMenu);
+    closeMenu.addEventListener('click', closeMenuHandler);
+    mobileMenu.addEventListener('click', handleOverlayClick);
+    document.addEventListener('keydown', handleEscapeKey);
+
+    // Get all links in the sidebar and add click handlers
+    const menuLinks = sidebar.querySelectorAll('a');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', closeMenuHandler);
     });
 </script>
