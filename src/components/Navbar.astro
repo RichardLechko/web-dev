@@ -1,0 +1,156 @@
+---
+// Navbar.astro
+const menuItems = [
+  { name: 'Home', path: '/#hero' },
+  { name: 'About', path: '/#about' },
+  { name: 'Leadership', path: '/#leadership' },
+  { name: 'Discord', path: 'https://discord.gg/uVHcZssevd', isExternal: true }
+];
+---
+
+<header class="absolute inset-x-0 top-0 z-50">
+    <nav class="fixed top-0 left-0 right-0 bg-white z-50 border-b border-gray-200">
+        <!-- Previous nav content remains the same -->
+        <div class="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="flex lg:flex-1">
+                <a href="/" class="-m-1.5 p-1.5">
+                    <span class="font-bold transition duration-300 ease-in-out hover:opacity-70">
+                        DePaul Web Dev
+                    </span>
+                </a>
+            </div>
+
+            <div class="flex md:hidden">
+                <button 
+                    type="button" 
+                    id="menu-toggle"
+                    aria-label="Open main menu"
+                    class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                    <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="hidden md:flex md:gap-x-12 items-center">
+                {menuItems.map(item => (
+                    <a 
+                        href={item.path}
+                        class={`text-sm font-semibold transition-colors ${
+                            item.isExternal 
+                                ? "text-red-700 hover:text-red-600" 
+                                : "text-gray-900 hover:text-gray-600"
+                        }`}
+                        target={item.isExternal ? "_blank" : undefined}
+                    >
+                        {item.name}
+                    </a>
+                ))}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu overlay -->
+    <div 
+        id="mobile-menu" 
+        class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300 opacity-0"
+        role="dialog"
+        aria-modal="true"
+    >
+        <!-- Sidebar -->
+        <div 
+            id="sidebar"
+            class="fixed inset-y-0 right-0 w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
+        >
+            <div class="flex items-center justify-between p-4 border-b">
+                <span class="font-semibold text-lg">Menu</span>
+                <button 
+                    id="close-menu"
+                    class="p-2 rounded-md hover:bg-gray-100"
+                >
+                    <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="flex-1 py-4">
+                {menuItems.map(item => (
+                    <a 
+                        href={item.path}
+                        class={`block px-4 py-2 text-sm font-semibold ${
+                            item.isExternal 
+                                ? "text-red-700 hover:bg-red-50" 
+                                : "text-gray-900 hover:bg-gray-50"
+                        }`}
+                        target={item.isExternal ? "_blank" : undefined}
+                    >
+                        {item.name}
+                    </a>
+                ))}
+            </nav>
+        </div>
+    </div>
+</header>
+
+<script>
+    const mobileMenu = document.getElementById('mobile-menu');
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const closeMenu = document.getElementById('close-menu');
+    const menuLinks = sidebar?.querySelectorAll('a');
+
+    function openMenu() {
+        if (!mobileMenu || !sidebar) return;
+        
+        // Show overlay
+        mobileMenu.classList.remove('hidden');
+        // Ensure opacity transition works by forcing a reflow
+        mobileMenu.offsetHeight;
+        mobileMenu.classList.add('opacity-100');
+        
+        // Show sidebar
+        requestAnimationFrame(() => {
+            sidebar.classList.remove('translate-x-full');
+        });
+    }
+
+    function closeMenuHandler() {
+        if (!mobileMenu || !sidebar) return;
+
+        // Hide sidebar first
+        sidebar.classList.add('translate-x-full');
+        mobileMenu.classList.remove('opacity-100');
+        
+        // Hide overlay after animation
+        setTimeout(() => {
+            mobileMenu.classList.add('hidden');
+        }, 300);
+    }
+
+    // Event Listeners
+    menuToggle?.addEventListener('click', openMenu);
+    closeMenu?.addEventListener('click', closeMenuHandler);
+
+    // Close when clicking overlay (but not sidebar)
+    mobileMenu?.addEventListener('click', (e) => {
+        if (e.target === mobileMenu) {
+            closeMenuHandler();
+        }
+    });
+
+    // Close when clicking a link
+    menuLinks?.forEach(link => {
+        link.addEventListener('click', () => {
+            closeMenuHandler();
+        });
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            closeMenuHandler();
+        }
+    });
+</script>

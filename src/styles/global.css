@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+* {
+    scroll-behavior: smooth;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono Regular';
+    src: url('/src/assets/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono Bold';
+    src: url('/src/assets/fonts/JetBrainsMono-Bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono SemiBold';
+    src: url('/src/assets/fonts/JetBrainsMono-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono Thin';
+    src: url('/src/assets/fonts/JetBrainsMono-Thin.woff2') format('woff2');
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.jetbrains {
+    font-family: 'JetBrains Mono Regular';
+}
+
+.manrope {
+    font-family: 'Manrope', sans-serif;
+}
+
+.space-grotesk {
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+h1 {
+    font-family: "JetBrains Mono Thin"
+}
+
+.navigation a {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0px;
+      width: 0;
+      height: 2px;
+      background-color: red;
+      transition: 0.3s ease-in-out;
+    }
+  
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  .container {
+    width: 60%;
+  }
+
+  .highlight {
+    background-color: #1d4ed8;
+    padding: 0 0.25rem;
+    border-radius: 0.25rem;
+  }
+
+  @media screen and (max-width: 1440px) {
+    .card {
+        max-width: 300px;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    h1 {
+        font-size: 3rem;
+    }
+
+    p,
+    .card > * {
+        font-size: 16px;
+    }
+
+    .card-container {
+        gap: 20px;
+    }
+
+    .card {
+        padding: 20px 0 0 0;
+        max-width: 225px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .container {
+        width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .card-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card {
+        min-width: 450px;
+        padding: 20px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .card {
+        padding: 20px 10px 20px 10px;
+        min-width: 300px;
+    }
+  }
+  @media screen and (max-width: 425px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    p, td {
+        font-size: 12px;
+    }
+
+    .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+  }
+
+  @media screen and (max-width: 375px) {
+    .card {
+        min-width: 250px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+  }
