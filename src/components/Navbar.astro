@@ -53,16 +53,16 @@ const menuItems = [
 
     <!-- Mobile menu overlay -->
     <div 
-        id="mobile-menu" 
-        class="fixed inset-0 bg-black/50 z-50 hidden md:hidden transition-opacity duration-300 opacity-0"
-        role="dialog"
-        aria-modal="true"
+    id="mobile-menu" 
+    class="fixed inset-0 bg-black/50 z-[999] hidden md:hidden transition-opacity duration-300 opacity-0"
+    role="dialog"
+    aria-modal="true"
+>
+    <!-- Sidebar -->
+    <div 
+        id="sidebar"
+        class="fixed inset-y-0 right-0 z-[1000] w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
     >
-        <!-- Sidebar -->
-        <div 
-            id="sidebar"
-            class="fixed inset-y-0 right-0 w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
-        >
             <div class="flex items-center justify-between p-4 border-b">
                 <span class="font-semibold text-lg">Menu</span>
                 <button 
@@ -108,33 +108,29 @@ const menuItems = [
     }
 
     function openMenu(): void {
-        // Show overlay
-        mobileMenu.classList.remove('hidden');
-        // Ensure opacity transition works by forcing a reflow
-        void mobileMenu.offsetHeight;
+    // First remove hidden
+    mobileMenu.classList.remove('hidden');
+    // Force browser reflow
+    void mobileMenu.offsetHeight;
+    // Then add opacity and transform
+    requestAnimationFrame(() => {
         mobileMenu.classList.add('opacity-100');
-        
-        // Show sidebar
-        requestAnimationFrame(() => {
-            sidebar.classList.remove('translate-x-full');
-        });
+        sidebar.classList.remove('translate-x-full');
+    });
+    document.body.style.overflow = 'hidden';
+}
 
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenuHandler(): void {
-        // Hide sidebar first
-        sidebar.classList.add('translate-x-full');
-        mobileMenu.classList.remove('opacity-100');
-        
-        // Hide overlay after animation
-        setTimeout(() => {
-            mobileMenu.classList.add('hidden');
-            // Restore body scroll
-            document.body.style.overflow = '';
-        }, 300);
-    }
+function closeMenuHandler(): void {
+    // First remove opacity
+    mobileMenu.classList.remove('opacity-100');
+    sidebar.classList.add('translate-x-full');
+    
+    // Wait for transition to complete before hiding
+    setTimeout(() => {
+        mobileMenu.classList.add('hidden');
+        document.body.style.overflow = '';
+    }, 300); // Match this with your transition duration
+}
 
     // Overlay click handler
     function handleOverlayClick(e: MouseEvent): void {
