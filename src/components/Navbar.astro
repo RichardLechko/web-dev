@@ -87,29 +87,48 @@ const menuItems = [
     const closeMenu = document.getElementById('close-menu');
 
     if (mobileMenu && menuToggle && closeMenu && sidebar) {
+        // Function to close the sidebar
+        const closeSidebar = () => {
+            sidebar.classList.add('translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 200);
+        };
+
+        // Handle menu toggle
         menuToggle.addEventListener('click', () => {
             mobileMenu.classList.remove('hidden');
-            // Add a small delay before removing translate-x-full
             requestAnimationFrame(() => {
                 sidebar.classList.remove('translate-x-full');
             });
         });
 
-        closeMenu.addEventListener('click', () => {
-            sidebar.classList.add('translate-x-full');
-            // Wait for slide animation to finish before hiding
-            setTimeout(() => {
-                mobileMenu.classList.add('hidden');
-            }, 200);
-        });
+        // Handle close button
+        closeMenu.addEventListener('click', closeSidebar);
 
+        // Handle overlay click
         mobileMenu.addEventListener('click', (e) => {
             if (e.target === mobileMenu) {
-                sidebar.classList.add('translate-x-full');
-                setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
-                }, 200);
+                closeSidebar();
             }
         });
+
+        // Handle menu item clicks
+        const menuItems = sidebar.querySelectorAll('a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', closeSidebar);
+        });
+
+        // Handle screen resize
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                mobileMenu.classList.add('hidden');
+                sidebar.classList.add('translate-x-full');
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        // Call it once to set initial state
+        handleResize();
     }
 </script>
