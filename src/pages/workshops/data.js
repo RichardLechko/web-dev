@@ -51,8 +51,8 @@ export const WORKSHOPS_DATA = [
       "Personal branding for developers",
     ],
     resources: {
-      presentation: "#",
-      recording: "#",
+      presentation: "https://docs.google.com/presentation/d/1iNkYfMejVf459HpixYXdC6jWemTOk-QeRM6rJl_ScA8/edit?usp=drive_link",
+      recording: "https://youtu.be/-8jImHQl9WA?si=HuO25_IV49FVnGta",
     },
     instructors: ["Richard Lechko"],
     instructorSocials: ["https://www.linkedin.com/in/richard-lechko/"],
